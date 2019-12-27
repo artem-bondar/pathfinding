@@ -51,7 +51,7 @@ public class Graph : MonoBehaviour
         this.mapData = mapData;
 
         width = mapData.GetLength(0);
-        width = mapData.GetLength(1);
+        height = mapData.GetLength(1);
 
         nodes = new Node[width, height];
 
