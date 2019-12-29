@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 10
   height: 5
+  textAsset: {fileID: 4900000, guid: 587da3dd8d8445444b89d947b26c1347, type: 3}
 --- !u!4 &165193053
 Transform:
   m_ObjectHideFlags: 0
