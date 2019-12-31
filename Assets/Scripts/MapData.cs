@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapData : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MapData : MonoBehaviour
     public int height = 0;
 
     public TextAsset textAsset;
+
+    public string resourcePath = "Mapdata";
 
     public void SetDimensions(List<string> textLines)
     {
@@ -65,5 +68,14 @@ public class MapData : MonoBehaviour
         return lines;
     }
 
-    public List<string> GetTextFromFile() => GetTextFromFile(textAsset);
+    public List<string> GetTextFromFile()
+    {
+        if (textAsset == null)
+        {
+            string levelName = SceneManager.GetActiveScene().name;
+            textAsset = Resources.Load<TextAsset>(resourcePath + "/" + levelName);
+        }
+
+        return GetTextFromFile(textAsset);
+    }
 }
