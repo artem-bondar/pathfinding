@@ -151,7 +151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 0
   height: 0
-  textAsset: {fileID: 0}
+  textAsset: {fileID: 4900000, guid: 587da3dd8d8445444b89d947b26c1347, type: 3}
+  textureMap: {fileID: 2800000, guid: 38c4f82e226cad445bbd5ebdec412a46, type: 3}
   resourcePath: Mapdata
 --- !u!4 &165193053
 Transform:
