@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 [RequireComponent(typeof(Graph))]
 public class GraphView : MonoBehaviour
 {
     public GameObject nodeViewPrefab;
+    public NodeView[,] nodeViews;
 
     public Color baseColor = Color.white;
     public Color wallColor = Color.black;
@@ -16,6 +19,8 @@ public class GraphView : MonoBehaviour
             return;
         }
 
+        nodeViews = new NodeView[graph.Width, graph.Height];
+
         foreach (Node node in graph.nodes)
         {
             GameObject instance = Instantiate(nodeViewPrefab, Vector3.zero, Quaternion.identity);
@@ -25,6 +30,7 @@ public class GraphView : MonoBehaviour
             if (nodeView != null)
             {
                 nodeView.Init(node);
+                nodeViews[node.xIndex, node.yIndex] = nodeView;
 
                 if (node.nodeType == NodeType.Blocked)
                 {
@@ -33,6 +39,22 @@ public class GraphView : MonoBehaviour
                 else
                 {
                     nodeView.ColorNode(baseColor);
+                }
+            }
+        }
+    }
+
+    public void ColorNodes(List<Node> nodes, Color color)
+    {
+        foreach (Node node in nodes)
+        {
+            if (node != null)
+            {
+                NodeView nodeView = nodeViews[node.xIndex, node.yIndex];
+
+                if (nodeView != null)
+                {
+                    nodeView.ColorNode(color);
                 }
             }
         }
