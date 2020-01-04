@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -21,6 +22,10 @@ public class Pathfinder : MonoBehaviour
     public Color exploredColor = Color.gray;
     public Color pathColor = Color.cyan;
 
+    public bool isComplete = false;
+
+    private int iterations = 0;
+
     public void Init(Graph graph, GraphView graphView, Node start, Node goal)
     {
         if (start == null || goal == null || graph == null || graphView == null)
@@ -40,19 +45,7 @@ public class Pathfinder : MonoBehaviour
         this.startNode = start;
         this.goalNode = goal;
 
-        NodeView startNodeView = graphView.nodeViews[start.xIndex, start.yIndex];
-
-        if (startNodeView != null)
-        {
-            startNodeView.ColorNode(startColor);
-        }
-
-        NodeView goalNodeView = graphView.nodeViews[goal.xIndex, goal.yIndex];
-
-        if (goalNodeView != null)
-        {
-            goalNodeView.ColorNode(goalColor);
-        }
+        ShowColors(graphView, start, goal);
 
         frontierNodes = new Queue<Node>();
         frontierNodes.Enqueue(start);
@@ -66,6 +59,43 @@ public class Pathfinder : MonoBehaviour
             {
                 graph.nodes[x, y].Reset();
             }
+        }
+
+        isComplete = false;
+        iterations = 0;
+    }
+
+    private void ShowColors() => ShowColors(graphView, startNode, goalNode);
+
+    private void ShowColors(GraphView graphView, Node start, Node goal)
+    {
+        if (start == null || goal == null || graph == null || graphView == null)
+        {
+            return;
+        }
+
+        if (frontierNodes != null)
+        {
+            graphView.ColorNodes(frontierNodes.ToList(), frontierColor);
+        }
+
+        if (exploreNodes != null)
+        {
+            graphView.ColorNodes(exploreNodes, exploredColor);
+        }
+
+        NodeView startNodeView = graphView.nodeViews[start.xIndex, start.yIndex];
+
+        if (startNodeView != null)
+        {
+            startNodeView.ColorNode(startColor);
+        }
+
+        NodeView goalNodeView = graphView.nodeViews[goal.xIndex, goal.yIndex];
+
+        if (goalNodeView != null)
+        {
+            goalNodeView.ColorNode(goalColor);
         }
     }
 }
