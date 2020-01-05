@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -13,7 +14,7 @@ public class Pathfinder : MonoBehaviour
 
     private Queue<Node> frontierNodes;
 
-    private List<Node> exploreNodes;
+    private List<Node> exploredNodes;
     private List<Node> pathNodes;
 
     public Color startColor = Color.green;
@@ -50,7 +51,7 @@ public class Pathfinder : MonoBehaviour
         frontierNodes = new Queue<Node>();
         frontierNodes.Enqueue(start);
 
-        exploreNodes = new List<Node>();
+        exploredNodes = new List<Node>();
         pathNodes = new List<Node>();
 
         for (int x = 0; x < graph.Width; x++)
@@ -79,9 +80,9 @@ public class Pathfinder : MonoBehaviour
             graphView.ColorNodes(frontierNodes.ToList(), frontierColor);
         }
 
-        if (exploreNodes != null)
+        if (exploredNodes != null)
         {
-            graphView.ColorNodes(exploreNodes, exploredColor);
+            graphView.ColorNodes(exploredNodes, exploredColor);
         }
 
         NodeView startNodeView = graphView.nodeViews[start.xIndex, start.yIndex];
@@ -96,6 +97,50 @@ public class Pathfinder : MonoBehaviour
         if (goalNodeView != null)
         {
             goalNodeView.ColorNode(goalColor);
+        }
+    }
+
+    public IEnumerator SearchRoutine(float timeStep = 0.1f)
+    {
+        yield return null;
+
+        while (!isComplete)
+        {
+            if (frontierNodes.Count > 0)
+            {
+                Node currentNode = frontierNodes.Dequeue();
+                iterations++;
+
+                if (!exploredNodes.Contains(currentNode))
+                {
+                    exploredNodes.Add(currentNode);
+                }
+
+                ExpandFrontier(currentNode);
+                ShowColors();
+
+                yield return new WaitForSeconds(timeStep);
+            }
+            else
+            {
+                isComplete = true;
+            }
+        }
+    }
+
+    private void ExpandFrontier(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (!exploredNodes.Contains(node.neighbours[i]) &&
+                    !frontierNodes.Contains(node.neighbours[i]))
+                {
+                    node.neighbours[i].previous = node;
+                    frontierNodes.Enqueue(node.neighbours[i]);
+                }
+            }
         }
     }
 }
