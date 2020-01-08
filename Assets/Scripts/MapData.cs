@@ -55,7 +55,6 @@ public class MapData : MonoBehaviour
             lines = GetMapFromTextFile(textAsset);
         }
 
-        lines = GetTextFromFile();
         SetDimensions(lines);
 
         int[,] map = new int[width, height];

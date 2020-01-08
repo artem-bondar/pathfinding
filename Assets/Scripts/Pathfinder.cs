@@ -25,48 +25,14 @@ public class Pathfinder : MonoBehaviour
     public Color arrowColor = new Color(0.85f, 0.85f, 0.85f, 1f);
     public Color highlightColor = new Color(1f, 1f, 0.5f, 1f);
 
+    public bool showIterations = true;
+    public bool showColors = true;
+    public bool showArrows = true;
+    public bool exitOnGoal = true;
+
     public bool isComplete = false;
 
     private int iterations = 0;
-
-    public void Init(Graph graph, GraphView graphView, Node start, Node goal)
-    {
-        if (start == null || goal == null || graph == null || graphView == null)
-        {
-            Debug.LogWarning("Pathfinder: Init error: missing component(s)!");
-            return;
-        }
-
-        if (start.nodeType == NodeType.Blocked || goal.nodeType == NodeType.Blocked)
-        {
-            Debug.LogWarning("Pathfinder: Init error: start and goal nodes must be unblocked!");
-            return;
-        }
-
-        this.graph = graph;
-        this.graphView = graphView;
-        this.startNode = start;
-        this.goalNode = goal;
-
-        ShowColors(graphView, start, goal);
-
-        frontierNodes = new Queue<Node>();
-        frontierNodes.Enqueue(start);
-
-        exploredNodes = new List<Node>();
-        pathNodes = new List<Node>();
-
-        for (int x = 0; x < graph.Width; x++)
-        {
-            for (int y = 0; y < graph.Height; y++)
-            {
-                graph.nodes[x, y].Reset();
-            }
-        }
-
-        isComplete = false;
-        iterations = 0;
-    }
 
     private void ShowColors() => ShowColors(graphView, startNode, goalNode);
 
@@ -145,8 +111,67 @@ public class Pathfinder : MonoBehaviour
         return path;
     }
 
+    private void ShowDiagnostics()
+    {
+        if (showColors)
+        {
+            ShowColors();
+        }
+
+        if (showArrows && graphView != null)
+        {
+            graphView.ShowNodeArrows(frontierNodes.ToList(), arrowColor);
+
+            if (frontierNodes.Contains(goalNode))
+            {
+                graphView.ShowNodeArrows(pathNodes, highlightColor);
+            }
+        }
+    }
+
+    public void Init(Graph graph, GraphView graphView, Node start, Node goal)
+    {
+        if (start == null || goal == null || graph == null || graphView == null)
+        {
+            Debug.LogWarning("Pathfinder: Init error: missing component(s)!");
+            return;
+        }
+
+        if (start.nodeType == NodeType.Blocked || goal.nodeType == NodeType.Blocked)
+        {
+            Debug.LogWarning("Pathfinder: Init error: start and goal nodes must be unblocked!");
+            return;
+        }
+
+        this.graph = graph;
+        this.graphView = graphView;
+        this.startNode = start;
+        this.goalNode = goal;
+
+        ShowColors(graphView, start, goal);
+
+        frontierNodes = new Queue<Node>();
+        frontierNodes.Enqueue(start);
+
+        exploredNodes = new List<Node>();
+        pathNodes = new List<Node>();
+
+        for (int x = 0; x < graph.Width; x++)
+        {
+            for (int y = 0; y < graph.Height; y++)
+            {
+                graph.nodes[x, y].Reset();
+            }
+        }
+
+        isComplete = false;
+        iterations = 0;
+    }
+
     public IEnumerator SearchRoutine(float timeStep = 0.1f)
     {
+        float timeStart = Time.time;
+
         yield return null;
 
         while (!isComplete)
@@ -166,26 +191,29 @@ public class Pathfinder : MonoBehaviour
                 if (frontierNodes.Contains(goalNode))
                 {
                     pathNodes = GetPathNodes(goalNode);
-                }
 
-                ShowColors();
-                
-                if (graphView != null)
-                {
-                    graphView.ShowNodeArrows(frontierNodes.ToList(), arrowColor);
-
-                    if (frontierNodes.Contains(goalNode))
+                    if (exitOnGoal)
                     {
-                        graphView.ShowNodeArrows(pathNodes, highlightColor);
+                        isComplete = true;
                     }
                 }
 
-                yield return new WaitForSeconds(timeStep);
+                if (showIterations)
+                {
+                    ShowDiagnostics();
+
+                    yield return new WaitForSeconds(timeStep);
+                }
             }
             else
             {
                 isComplete = true;
             }
         }
+
+        ShowDiagnostics();
+        
+        Debug.Log("Pathfinder: SearchRoutine: elapse time = " + (Time.time - timeStart).ToString() +
+                  " seconds");
     }
 }
