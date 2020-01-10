@@ -88,4 +88,18 @@ public class Graph : MonoBehaviour
     }
 
     public bool IsWithinBounds(int x, int y) => x >= 0 && x < width && y >= 0 && y < height;
+
+    public float GetNodeDistance(Node source, Node target)
+    {
+        int dx = Mathf.Abs(source.xIndex - target.xIndex);
+        int dy = Mathf.Abs(source.yIndex - target.yIndex);
+
+        int min = Mathf.Min(dx, dy);
+        int max = Mathf.Max(dx, dy);
+
+        int diagonalSteps = min;
+        int straightSteps = max - min;
+
+        return 1.4f * diagonalSteps + straightSteps;
+    }
 }

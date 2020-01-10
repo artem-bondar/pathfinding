@@ -21,6 +21,8 @@ public class Node
 
     public Node previous = null;
 
+    public float distanceTraveled = Mathf.Infinity;
+
     public Node(int xIndex, int yIndex, NodeType nodeType)
     {
         this.xIndex = xIndex;
