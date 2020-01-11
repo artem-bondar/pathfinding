@@ -34,6 +34,14 @@ public class Pathfinder : MonoBehaviour
 
     private int iterations = 0;
 
+    public enum Mode
+    {
+        BreadthFirstSearch = 0,
+        Dijkstra = 1
+    }
+
+    public Mode mode = Mode.BreadthFirstSearch;
+
     private void ShowColors() => ShowColors(graphView, startNode, goalNode);
 
     private void ShowColors(GraphView graphView, Node start, Node goal)
@@ -73,7 +81,7 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
-    private void ExpandFrontier(Node node)
+    private void ExpandFrontierBreadthFirst(Node node)
     {
         if (node != null)
         {
@@ -82,8 +90,40 @@ public class Pathfinder : MonoBehaviour
                 if (!exploredNodes.Contains(node.neighbours[i]) &&
                     !frontierNodes.Contains(node.neighbours[i]))
                 {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTraveled = distanceToNeighbor + node.distanceTraveled;
+
                     node.neighbours[i].previous = node;
+                    node.neighbours[i].distanceTraveled = newDistanceTraveled;
+
                     frontierNodes.Enqueue(node.neighbours[i]);
+                }
+            }
+        }
+    }
+
+    private void ExpandFrontierDijkstra(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (!exploredNodes.Contains(node.neighbours[i]))
+                {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTraveled = distanceToNeighbor + node.distanceTraveled;
+
+                    if (float.IsPositiveInfinity(node.neighbours[i].distanceTraveled) ||
+                        newDistanceTraveled < node.neighbours[i].distanceTraveled)
+                    {
+                        node.neighbours[i].previous = node;
+                        node.neighbours[i].distanceTraveled = newDistanceTraveled;
+                    }
+
+                    if (!frontierNodes.Contains(node.neighbours[i]))
+                    {
+                        frontierNodes.Enqueue(node.neighbours[i]);
+                    }
                 }
             }
         }
@@ -166,6 +206,8 @@ public class Pathfinder : MonoBehaviour
 
         isComplete = false;
         iterations = 0;
+
+        startNode.distanceTraveled = 0;
     }
 
     public IEnumerator SearchRoutine(float timeStep = 0.1f)
@@ -186,7 +228,14 @@ public class Pathfinder : MonoBehaviour
                     exploredNodes.Add(currentNode);
                 }
 
-                ExpandFrontier(currentNode);
+                if (mode == Mode.BreadthFirstSearch)
+                {
+                    ExpandFrontierBreadthFirst(currentNode);
+                }
+                else if (mode == Mode.Dijkstra)
+                {
+                    ExpandFrontierDijkstra(currentNode);
+                }
 
                 if (frontierNodes.Contains(goalNode))
                 {
@@ -195,6 +244,9 @@ public class Pathfinder : MonoBehaviour
                     if (exitOnGoal)
                     {
                         isComplete = true;
+
+                        Debug.Log("Pathfinder mode:" + mode.ToString() + ", path length = " +
+                                  goalNode.distanceTraveled.ToString());
                     }
                 }
 
@@ -212,7 +264,7 @@ public class Pathfinder : MonoBehaviour
         }
 
         ShowDiagnostics();
-        
+
         Debug.Log("Pathfinder: SearchRoutine: elapse time = " + (Time.time - timeStart).ToString() +
                   " seconds");
     }

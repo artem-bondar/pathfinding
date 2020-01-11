@@ -438,11 +438,12 @@ MonoBehaviour:
   pathColor: {r: 0, g: 1, b: 1, a: 1}
   arrowColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
   highlightColor: {r: 1, g: 1, b: 0.5, a: 1}
-  showIterations: 0
+  showIterations: 1
   showColors: 1
-  showArrows: 1
+  showArrows: 0
   exitOnGoal: 1
   isComplete: 0
+  mode: 1
 --- !u!4 &1484226958
 Transform:
   m_ObjectHideFlags: 0
@@ -491,9 +492,9 @@ MonoBehaviour:
   pathfinder: {fileID: 1484226957}
   startX: 0
   startY: 0
-  goalX: 62
-  goalY: 20
-  timeStep: 0.025
+  goalX: 14
+  goalY: 7
+  timeStep: 0.0125
 --- !u!4 &1847452761
 Transform:
   m_ObjectHideFlags: 0
