@@ -4,7 +4,7 @@ A simple pathfinding project in Unity created under Wilmer Lin's [course](https:
 
 ## About
 
-In this project next pathfinding algorithmes were implemented:
+In this project next pathfinding algorithms were implemented:
 
 - Breadthfirst search
 - Dijkstra
