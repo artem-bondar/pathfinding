@@ -443,7 +443,7 @@ MonoBehaviour:
   showArrows: 0
   exitOnGoal: 1
   isComplete: 0
-  mode: 1
+  mode: 0
 --- !u!4 &1484226958
 Transform:
   m_ObjectHideFlags: 0
