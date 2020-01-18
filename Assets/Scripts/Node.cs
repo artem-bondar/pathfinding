@@ -6,7 +6,10 @@ using UnityEngine;
 public enum NodeType
 {
     Open = 0,
-    Blocked = 1
+    Blocked = 1,
+    LightTerrain = 2,
+    MediumTerrain = 3,
+    HeavyTerrain = 4
 }
 
 public class Node : IComparable<Node>
