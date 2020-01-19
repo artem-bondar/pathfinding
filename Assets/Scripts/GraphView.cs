@@ -8,9 +8,6 @@ public class GraphView : MonoBehaviour
     public GameObject nodeViewPrefab;
     public NodeView[,] nodeViews;
 
-    public Color baseColor = Color.white;
-    public Color wallColor = Color.black;
-
     public void Init(Graph graph)
     {
         if (graph == null)
@@ -32,14 +29,8 @@ public class GraphView : MonoBehaviour
                 nodeView.Init(node);
                 nodeViews[node.xIndex, node.yIndex] = nodeView;
 
-                if (node.nodeType == NodeType.Blocked)
-                {
-                    nodeView.ColorNode(wallColor);
-                }
-                else
-                {
-                    nodeView.ColorNode(baseColor);
-                }
+                Color originalColor = MapData.GetColorFromNodeType(node.nodeType);
+                nodeView.ColorNode(originalColor);
             }
         }
     }

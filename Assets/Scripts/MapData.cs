@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -18,7 +19,7 @@ public class MapData : MonoBehaviour
     public Color32 blockedColor = Color.black;
 
     public Color32 lightTerrainColor = new Color32(124, 194, 78, 255);
-    public Color32 mediumTerrainColor = new Color32(255, 255, 52, 255);
+    public Color32 mediumTerrainColor = new Color32(252, 255, 52, 255);
     public Color32 heavyTerrainColor = new Color32(255, 129, 12, 255);
 
     private static Dictionary<Color32, NodeType> terrainLookupTable =
@@ -144,4 +145,15 @@ public class MapData : MonoBehaviour
     }
 
     public List<string> GetTextFromFile() => GetMapFromTextFile(textAsset);
+
+    public static Color GetColorFromNodeType(NodeType nodeType)
+    {
+        if (terrainLookupTable.ContainsValue(nodeType))
+        {
+            Color colorKey = terrainLookupTable.FirstOrDefault(x => x.Value == nodeType).Key;
+            return colorKey;
+        }
+
+        return Color.white;
+    }
 }

@@ -154,6 +154,21 @@ MonoBehaviour:
   textAsset: {fileID: 4900000, guid: 587da3dd8d8445444b89d947b26c1347, type: 3}
   textureMap: {fileID: 2800000, guid: 9bcfe5b0e1d22f44db0b04b8b1eae57b, type: 3}
   resourcePath: Mapdata
+  openColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  blockedColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  lightTerrainColor:
+    serializedVersion: 2
+    rgba: 4283351676
+  mediumTerrainColor:
+    serializedVersion: 2
+    rgba: 4281663484
+  heavyTerrainColor:
+    serializedVersion: 2
+    rgba: 4279009791
 --- !u!4 &165193053
 Transform:
   m_ObjectHideFlags: 0
@@ -226,8 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeViewPrefab: {fileID: 4249486442842807, guid: fec18d2e926107e42acd4b1548ff03ae,
     type: 3}
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
-  wallColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
