@@ -35,17 +35,25 @@ public class GraphView : MonoBehaviour
         }
     }
 
-    public void ColorNodes(List<Node> nodes, Color color)
+    public void ColorNodes(List<Node> nodes, Color color,
+                           bool lerpColor = false, float lerpValue = 0.5f)
     {
         foreach (Node node in nodes)
         {
             if (node != null)
             {
                 NodeView nodeView = nodeViews[node.xIndex, node.yIndex];
+                Color newColor = color;
+
+                if (lerpColor)
+                {
+                    Color originalColor = MapData.GetColorFromNodeType(node.nodeType);
+                    newColor = Color.Lerp(originalColor, newColor, lerpValue);
+                }
 
                 if (nodeView != null)
                 {
-                    nodeView.ColorNode(color);
+                    nodeView.ColorNode(newColor);
                 }
             }
         }

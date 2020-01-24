@@ -505,8 +505,8 @@ MonoBehaviour:
   pathfinder: {fileID: 1484226957}
   startX: 0
   startY: 0
-  goalX: 14
-  goalY: 7
+  goalX: 20
+  goalY: 12
   timeStep: 0.0125
 --- !u!4 &1847452761
 Transform:
