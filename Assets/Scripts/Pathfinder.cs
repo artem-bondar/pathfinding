@@ -38,7 +38,8 @@ public class Pathfinder : MonoBehaviour
     public enum Mode
     {
         BreadthFirstSearch = 0,
-        Dijkstra = 1
+        GreedyBestFirst = 1,
+        Dijkstra = 2
     }
 
     public Mode mode = Mode.BreadthFirstSearch;
@@ -107,6 +108,34 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
+    private void ExpandFrontierGreedyBestFirst(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (!exploredNodes.Contains(node.neighbours[i]) &&
+                    !frontierNodes.Contains(node.neighbours[i]))
+                {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTraveled = distanceToNeighbor +
+                        node.distanceTraveled + (int)node.nodeType;
+
+                    node.neighbours[i].previous = node;
+                    node.neighbours[i].distanceTraveled = newDistanceTraveled;
+
+                    if (graph != null)
+                    {
+                        node.neighbours[i].priority =
+                            (int)graph.GetNodeDistance(node.neighbours[i], goalNode);
+                    }
+
+                    frontierNodes.Enqueue(node.neighbours[i]);
+                }
+            }
+        }
+    }
+
     private void ExpandFrontierDijkstra(Node node)
     {
         if (node != null)
@@ -128,7 +157,7 @@ public class Pathfinder : MonoBehaviour
 
                     if (!frontierNodes.Contains(node.neighbours[i]))
                     {
-                        node.neighbours[i].priority = (int) node.neighbours[i].distanceTraveled;
+                        node.neighbours[i].priority = (int)node.neighbours[i].distanceTraveled;
                         frontierNodes.Enqueue(node.neighbours[i]);
                     }
                 }
@@ -238,6 +267,10 @@ public class Pathfinder : MonoBehaviour
                 if (mode == Mode.BreadthFirstSearch)
                 {
                     ExpandFrontierBreadthFirst(currentNode);
+                }
+                else if (mode == Mode.GreedyBestFirst)
+                {
+                    ExpandFrontierGreedyBestFirst(currentNode);
                 }
                 else if (mode == Mode.Dijkstra)
                 {
