@@ -39,7 +39,8 @@ public class Pathfinder : MonoBehaviour
     {
         BreadthFirstSearch = 0,
         GreedyBestFirst = 1,
-        Dijkstra = 2
+        Dijkstra = 2,
+        AStar = 3
     }
 
     public Mode mode = Mode.BreadthFirstSearch;
@@ -165,6 +166,40 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
+    private void ExpandFrontierAStar(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (!exploredNodes.Contains(node.neighbours[i]))
+                {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTraveled = distanceToNeighbor
+                        + node.distanceTraveled + (int)node.nodeType;
+
+                    if (float.IsPositiveInfinity(node.neighbours[i].distanceTraveled) ||
+                        newDistanceTraveled < node.neighbours[i].distanceTraveled)
+                    {
+                        node.neighbours[i].previous = node;
+                        node.neighbours[i].distanceTraveled = newDistanceTraveled;
+                    }
+
+                    if (!frontierNodes.Contains(node.neighbours[i]) && graph != null)
+                    {
+                        int distanceToGoal =
+                            (int)graph.GetNodeDistance(node.neighbours[i], goalNode);
+
+                        node.neighbours[i].priority =
+                            (int)node.neighbours[i].distanceTraveled + distanceToGoal;
+
+                        frontierNodes.Enqueue(node.neighbours[i]);
+                    }
+                }
+            }
+        }
+    }
+
     private List<Node> GetPathNodes(Node endNode)
     {
         List<Node> path = new List<Node>();
@@ -275,6 +310,10 @@ public class Pathfinder : MonoBehaviour
                 else if (mode == Mode.Dijkstra)
                 {
                     ExpandFrontierDijkstra(currentNode);
+                }
+                else if (mode == Mode.AStar)
+                {
+                    ExpandFrontierAStar(currentNode);
                 }
 
                 if (frontierNodes.Contains(goalNode))
