@@ -27,7 +27,7 @@ public class Node : IComparable<Node>
 
     public float distanceTraveled = Mathf.Infinity;
 
-    public int priority;
+    public float priority;
 
     public Node(int xIndex, int yIndex, NodeType nodeType)
     {
