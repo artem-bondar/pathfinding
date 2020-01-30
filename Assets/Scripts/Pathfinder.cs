@@ -128,7 +128,7 @@ public class Pathfinder : MonoBehaviour
                     if (graph != null)
                     {
                         node.neighbours[i].priority =
-                            (int)graph.GetNodeDistance(node.neighbours[i], goalNode);
+                            graph.GetNodeDistance(node.neighbours[i], goalNode);
                     }
 
                     frontierNodes.Enqueue(node.neighbours[i]);
@@ -158,7 +158,7 @@ public class Pathfinder : MonoBehaviour
 
                     if (!frontierNodes.Contains(node.neighbours[i]))
                     {
-                        node.neighbours[i].priority = (int)node.neighbours[i].distanceTraveled;
+                        node.neighbours[i].priority = node.neighbours[i].distanceTraveled;
                         frontierNodes.Enqueue(node.neighbours[i]);
                     }
                 }
@@ -187,11 +187,11 @@ public class Pathfinder : MonoBehaviour
 
                     if (!frontierNodes.Contains(node.neighbours[i]) && graph != null)
                     {
-                        int distanceToGoal =
-                            (int)graph.GetNodeDistance(node.neighbours[i], goalNode);
+                        float distanceToGoal =
+                            graph.GetNodeDistance(node.neighbours[i], goalNode);
 
                         node.neighbours[i].priority =
-                            (int)node.neighbours[i].distanceTraveled + distanceToGoal;
+                            node.neighbours[i].distanceTraveled + distanceToGoal;
 
                         frontierNodes.Enqueue(node.neighbours[i]);
                     }
@@ -283,7 +283,7 @@ public class Pathfinder : MonoBehaviour
 
     public IEnumerator SearchRoutine(float timeStep = 0.1f)
     {
-        float timeStart = Time.time;
+        float timeStart = Time.realtimeSinceStartup;
 
         yield return null;
 
@@ -344,7 +344,7 @@ public class Pathfinder : MonoBehaviour
 
         ShowDiagnostics(true);
 
-        Debug.Log("Pathfinder: SearchRoutine: elapse time = " + (Time.time - timeStart).ToString() +
-                  " seconds");
+        Debug.Log("Pathfinder: SearchRoutine: elapse time = " +
+                 (Time.realtimeSinceStartup - timeStart).ToString() + " seconds");
     }
 }
