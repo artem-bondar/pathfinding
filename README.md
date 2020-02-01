@@ -6,8 +6,8 @@ A simple pathfinding project in Unity created under Wilmer Lin's [course](https:
 
 In this project next pathfinding algorithms were implemented:
 
-- Breadthfirst search
-- Greedy Best First
+- Breadth-first search
+- Greedy best-first
 - Dijkstra
 - A*
 
@@ -23,13 +23,13 @@ The import settings for `.psd` are next:
 
 ## Demonstrations
 
-- Breadthfirst search
+- Breadth-first search
 
-![Breadthfirst search demonstration](Docs/Images/breadfirst&#32;search.gif)
+![Breadth-first search demonstration](Docs/Images/breadfirst&#32;search.gif)
 
-- Greedy Best First
+- Greedy best-first
 
-![Greedy Best First demonstration](Docs/Images/greedy&#32;best&#32;first.gif)
+![Greedy best-first demonstration](Docs/Images/greedy&#32;best&#32;first.gif)
 
 - Dijkstra
 
